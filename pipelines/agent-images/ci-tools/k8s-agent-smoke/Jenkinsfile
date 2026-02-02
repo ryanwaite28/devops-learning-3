@@ -125,7 +125,7 @@ data=json.load(open(p))
 results=data.get("results", [])
 print(f"Semgrep findings: {len(results)}")
 sys.exit(1 if len(results) > 0 else 0)
-          PY
+PY
         '''
       }
     }
