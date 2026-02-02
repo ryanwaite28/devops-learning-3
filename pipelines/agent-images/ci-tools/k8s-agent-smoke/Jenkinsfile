@@ -32,34 +32,96 @@ spec:
     }
   }
 
+  options {
+    timestamps()
+    ansiColor('xterm')
+    disableConcurrentBuilds()
+    buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
+  }
+
+  environment {
+    REPORTS_DIR = "reports"
+  }
+
   stages {
     stage('SCM + Agent Smoke Test') {
       steps {
-        sh 'echo "Hello from Kubernetes agent"'
-        sh 'uname -a'
-        sh 'ls -la'
+        sh '''
+          set -eux
+          echo "Hello from Kubernetes agent"
+          uname -a
+          ls -la
+        '''
+      }
+    }
+
+    stage('Tool Versions') {
+      steps {
+        sh '''
+          set -eux
+          mkdir -p "${REPORTS_DIR}"
+          echo "== identity =="
+          id
+          echo "== versions =="
+          semgrep --version
+          syft version
+          trivy --version
+          sonar-scanner --version
+          yq --version
+        '''
+      }
+    }
+
+    stage('SAST: Semgrep') {
+      steps {
+        sh '''
+          set -eux
+          mkdir -p "${REPORTS_DIR}"
+          # Non-blocking for now; we'll add gating rules next
+          semgrep --metrics off --config p/ci --json -o "${REPORTS_DIR}/semgrep.json" . || true
+        '''
+      }
+    }
+
+    stage('SBOM: Syft') {
+      steps {
+        sh '''
+          set -eux
+          mkdir -p "${REPORTS_DIR}"
+          syft dir:. -o cyclonedx-json="${REPORTS_DIR}/sbom.cdx.json"
+        '''
+      }
+    }
+
+    stage('Vuln Scan: Trivy FS') {
+      steps {
+        sh '''
+          set -eux
+          mkdir -p "${REPORTS_DIR}"
+          # Non-blocking for now; we’ll enforce thresholds next
+          trivy fs --format json -o "${REPORTS_DIR}/trivy-fs.json" . || true
+        '''
       }
     }
   }
 
   post {
-      always {
-          emailext (
-              subject: "${currentBuild.currentResult}: Build ${env.BUILD_NUMBER} - ${env.JOB_NAME}",
-              body: """
-              <html><body>
-                  <h2 style="color: ${currentBuild.currentResult == 'SUCCESS' ? 'green' : 'red'};">
-                      Status: ${currentBuild.currentResult}
-                  </h2>
-                  <hr/>
-                  <h3>External Links (Mac Browser)</h3>
-                      <li><a href="${env.BUILD_URL}">Jenkins Pipeline Output</a></li>
-                  </ul>
-              </body></html>
-              """,
-              to: 'dev-team@mailpit.local',
-              attachmentsPattern: 'target/site/jacoco/index.html'
-          )
-      }
+    always {
+      archiveArtifacts artifacts: 'reports/*', allowEmptyArchive: true
+
+      emailext (
+        subject: "${currentBuild.currentResult}: Build ${env.BUILD_NUMBER} - ${env.JOB_NAME}",
+        body: """
+        <html><body>
+          <h2 style="color: ${currentBuild.currentResult == 'SUCCESS' ? 'green' : 'red'};">
+            Status: ${currentBuild.currentResult}
+          </h2>
+          <p><b>Build:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+          <p><b>Artifacts:</b> reports/* (Semgrep, SBOM, Trivy)</p>
+        </body></html>
+        """,
+        to: 'dev-team@mailpit.local'
+      )
+    }
   }
 }
