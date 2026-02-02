@@ -119,12 +119,12 @@ spec:
           semgrep --metrics off --config p/ci --json -o reports/semgrep.json . || true
           # Gate: fail if any findings exist in the JSON
           python3 - <<'PY'
-          import json, sys
-          p="reports/semgrep.json"
-          data=json.load(open(p))
-          results=data.get("results", [])
-          print(f"Semgrep findings: {len(results)}")
-          sys.exit(1 if len(results) > 0 else 0)
+import json, sys
+p="reports/semgrep.json"
+data=json.load(open(p))
+results=data.get("results", [])
+print(f"Semgrep findings: {len(results)}")
+sys.exit(1 if len(results) > 0 else 0)
           PY
         '''
       }
