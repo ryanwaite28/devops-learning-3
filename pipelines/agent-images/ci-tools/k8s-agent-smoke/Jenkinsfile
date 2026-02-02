@@ -59,6 +59,13 @@ spec:
 
   environment {
     REPORTS_DIR = "reports"
+
+    CI_HOME = "${env.WORKSPACE}"
+    XDG_CACHE_HOME = "${env.WORKSPACE}/.cache"
+    XDG_CONFIG_HOME = "${env.WORKSPACE}/.config"
+    SEMGREP_USER_HOME = "${env.WORKSPACE}/.semgrep"
+    SEMGREP_DISABLE_VERSION_CHECK = "1"
+    SEMGREP_SEND_METRICS = "off"
   }
 
   stages {
@@ -77,15 +84,11 @@ spec:
       steps {
         sh '''
           set -eux
-
-          mkdir -p "$HOME/.cache" "$HOME/.config" "$HOME/.semgrep" reports
-
-          # Prove we can write where we need to (fails fast if perms are wrong)
-          touch "$HOME/.cache/.write_test"
-          touch "$HOME/.config/.write_test"
-          touch "$HOME/.semgrep/.write_test"
-          rm -f "$HOME/.cache/.write_test" "$HOME/.config/.write_test" "$HOME/.semgrep/.write_test"
-
+          mkdir -p "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME" "$SEMGREP_USER_HOME" reports
+          touch "$XDG_CACHE_HOME/.write_test"
+          touch "$XDG_CONFIG_HOME/.write_test"
+          touch "$SEMGREP_USER_HOME/.write_test"
+          rm -f "$XDG_CACHE_HOME/.write_test" "$XDG_CONFIG_HOME/.write_test" "$SEMGREP_USER_HOME/.write_test"
         '''
       }
     }
@@ -94,18 +97,12 @@ spec:
       steps {
         sh '''
           set -eux
-          mkdir -p "${REPORTS_DIR}"
-          echo "== identity =="
-          id
-          echo "== versions =="
+          export HOME="$CI_HOME"
           semgrep --version
           syft version
           trivy --version
           sonar-scanner --version
           yq --version
-
-          mkdir -p "$HOME/.cache" "$HOME/.config" "$HOME/.semgrep"
-          chmod -R u+rwX,go+rX "$HOME/.cache" "$HOME/.config" "$HOME/.semgrep"
         '''
       }
     }
@@ -116,6 +113,8 @@ spec:
           set -eux
           mkdir -p "${HOME}/.semgrep"
           mkdir -p "${REPORTS_DIR}"
+
+          export HOME="$CI_HOME"
 
           semgrep --metrics off --config p/ci --json -o reports/semgrep.json . || true
           # Gate: fail if any findings exist in the JSON
