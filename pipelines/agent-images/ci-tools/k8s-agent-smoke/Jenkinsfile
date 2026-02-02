@@ -155,7 +155,7 @@ PY
             sh '''
               set -eux
 
-              export WORKSPACE="$CI_HOME"
+              export WORKSPACE="$HOME"
 
               sonar-scanner \
                 -Dsonar.projectBaseDir="${HOME}" \
