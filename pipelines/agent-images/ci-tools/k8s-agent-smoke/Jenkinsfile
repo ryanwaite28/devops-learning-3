@@ -9,6 +9,8 @@ kind: Pod
 spec:
   serviceAccountName: jenkins-ci
   restartPolicy: Never
+  securityContext:
+    fsGroup: 1000
   containers:
   - name: jnlp
     image: jenkins/inbound-agent:jdk17
@@ -20,6 +22,9 @@ spec:
     imagePullPolicy: IfNotPresent
     command: ["bash", "-lc", "cat"]
     tty: true
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
     resources:
       requests: { cpu: "200m", memory: "512Mi" }
       limits:   { cpu: "1000m", memory: "1Gi" }
