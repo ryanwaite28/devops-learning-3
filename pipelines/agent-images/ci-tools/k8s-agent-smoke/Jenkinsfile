@@ -35,9 +35,6 @@ spec:
       resources:
         requests: { cpu: "200m", memory: "512Mi" }
         limits:   { cpu: "1000m", memory: "1Gi" }
-      env:
-        - name: TRIVY_CACHE_DIR
-          value: $WORKSPACE/.cache/trivy
 '''
     }
   }
@@ -59,6 +56,7 @@ spec:
     SEMGREP_USER_HOME = "${env.WORKSPACE}/.semgrep"
     SEMGREP_DISABLE_VERSION_CHECK = "1"
     SEMGREP_SEND_METRICS = "off"
+    TRIVY_CACHE_DIR = "${env.WORKSPACE}/.cache/trivy"
   }
 
   stages {
@@ -154,11 +152,11 @@ PY
           withSonarQubeEnv('SonarQube') {
             sh '''
               set -eux
-              # Make sure Sonar writes temp/config in a writable place
               export HOME="$WORKSPACE"
+              export SONAR_USER_HOME="$WORKSPACE/.sonar"
 
               sonar-scanner \
-                -Dsonar.projectBaseDir="${HOME}" \
+                -Dsonar.projectBaseDir="${WORKSPACE}" \
                 -Dsonar.login="${SONAR_AUTH_TOKEN}"
             '''
           }
@@ -171,6 +169,65 @@ PY
         timeout(time: 5, unit: 'MINUTES') {
           waitForQualityGate abortPipeline: true
         }
+      }
+    }
+
+    stage('Security Summary') {
+      steps {
+        sh '''
+          set -eux
+          mkdir -p reports
+
+          python3 - <<'PY'
+import json, os, datetime
+
+def read_json(path):
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return None
+
+sem = read_json("reports/semgrep.json") or {}
+trv = read_json("reports/trivy-fs.json") or {}
+
+sem_results = sem.get("results", []) or []
+sem_count = len(sem_results)
+
+# Trivy JSON schema: Results[].Vulnerabilities[] (varies by mode)
+sev_counts = {}
+for r in (trv.get("Results") or []):
+    for v in (r.get("Vulnerabilities") or []):
+        sev = v.get("Severity","UNKNOWN")
+        sev_counts[sev] = sev_counts.get(sev,0) + 1
+
+now = datetime.datetime.utcnow().isoformat() + "Z"
+
+lines = []
+lines.append(f"# CI Security Summary")
+lines.append(f"- Generated: {now}")
+lines.append("")
+lines.append("## Semgrep (SAST)")
+lines.append(f"- Findings: {sem_count}")
+lines.append("")
+lines.append("## Trivy FS (Vulns)")
+if sev_counts:
+    for sev in ["CRITICAL","HIGH","MEDIUM","LOW","UNKNOWN"]:
+        if sev in sev_counts:
+            lines.append(f"- {sev}: {sev_counts[sev]}")
+else:
+    lines.append("- No vulnerability results parsed (check reports/trivy-fs.json)")
+lines.append("")
+lines.append("## SonarQube")
+lines.append("- See Jenkins console output for dashboard link + quality gate result")
+lines.append("")
+
+with open("reports/summary.md","w") as f:
+    f.write("\\n".join(lines))
+
+print("\\n".join(lines))
+PY
+        '''
       }
     }
   }
