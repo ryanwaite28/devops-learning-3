@@ -1,0 +1,56 @@
+pipeline {
+  agent {
+    kubernetes {
+      label 'k8s-agent-smoke'
+      defaultContainer 'tools'
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  serviceAccountName: jenkins-ci
+  restartPolicy: Never
+  containers:
+  - name: jnlp
+    image: jenkins/inbound-agent:jdk17
+    resources:
+      requests: { cpu: "100m", memory: "256Mi" }
+      limits:   { cpu: "500m", memory: "512Mi" }
+  - name: tools
+    image: alpine:3.20
+    command: ["sh", "-c", "cat"]
+    tty: true
+"""
+    }
+  }
+
+  stages {
+    stage('SCM + Agent Smoke Test') {
+      steps {
+        sh 'echo "Hello from Kubernetes agent"'
+        sh 'uname -a'
+        sh 'ls -la'
+      }
+    }
+  }
+
+  post {
+      always {
+          emailext (
+              subject: "${currentBuild.currentResult}: Build ${env.BUILD_NUMBER} - ${env.JOB_NAME}",
+              body: """
+              <html><body>
+                  <h2 style="color: ${currentBuild.currentResult == 'SUCCESS' ? 'green' : 'red'};">
+                      Status: ${currentBuild.currentResult}
+                  </h2>
+                  <hr/>
+                  <h3>External Links (Mac Browser)</h3>
+                      <li><a href="${env.BUILD_URL}">Jenkins Pipeline Output</a></li>
+                  </ul>
+              </body></html>
+              """,
+              to: 'dev-team@mailpit.local',
+              attachmentsPattern: 'target/site/jacoco/index.html'
+          )
+      }
+  }
+}
