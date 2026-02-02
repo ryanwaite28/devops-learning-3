@@ -16,9 +16,13 @@ spec:
       requests: { cpu: "100m", memory: "256Mi" }
       limits:   { cpu: "500m", memory: "512Mi" }
   - name: tools
-    image: alpine:3.20
-    command: ["sh", "-c", "cat"]
+    image: ci-tools:0.1.0
+    imagePullPolicy: IfNotPresent
+    command: ["bash", "-lc", "cat"]
     tty: true
+    resources:
+      requests: { cpu: "200m", memory: "512Mi" }
+      limits:   { cpu: "1000m", memory: "1Gi" }
 """
     }
   }
