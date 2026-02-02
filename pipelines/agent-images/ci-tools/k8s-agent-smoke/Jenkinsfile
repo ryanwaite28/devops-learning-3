@@ -77,10 +77,15 @@ spec:
       steps {
         sh '''
           set -eux
-          # Ensure Semgrep (and other tools) have expected XDG dirs
+
           mkdir -p "$HOME/.cache" "$HOME/.config" "$HOME/.semgrep" reports
-          # Make sure current user can write
-          chmod -R u+rwX,go+rX "$HOME/.cache" "$HOME/.config" "$HOME/.semgrep" || true
+
+          # Prove we can write where we need to (fails fast if perms are wrong)
+          touch "$HOME/.cache/.write_test"
+          touch "$HOME/.config/.write_test"
+          touch "$HOME/.semgrep/.write_test"
+          rm -f "$HOME/.cache/.write_test" "$HOME/.config/.write_test" "$HOME/.semgrep/.write_test"
+
         '''
       }
     }
