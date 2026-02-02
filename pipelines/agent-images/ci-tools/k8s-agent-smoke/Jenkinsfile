@@ -36,10 +36,15 @@ spec:
         requests: { cpu: "200m", memory: "512Mi" }
         limits:   { cpu: "1000m", memory: "1Gi" }
       env:
+        env:
         - name: HOME
           value: /home/jenkins/agent
         - name: SEMGREP_USER_HOME
           value: /home/jenkins/agent/.semgrep
+        - name: XDG_CACHE_HOME
+          value: /home/jenkins/agent/.cache
+        - name: XDG_CONFIG_HOME
+          value: /home/jenkins/agent/.config
         - name: TRIVY_CACHE_DIR
           value: /home/jenkins/agent/.cache/trivy
 """
@@ -82,6 +87,9 @@ spec:
           trivy --version
           sonar-scanner --version
           yq --version
+
+          mkdir -p "$HOME/.cache" "$HOME/.config" "$HOME/.semgrep"
+          chmod -R u+rwX,go+rX "$HOME/.cache" "$HOME/.config" "$HOME/.semgrep"
         '''
       }
     }
