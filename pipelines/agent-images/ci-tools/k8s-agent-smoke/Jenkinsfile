@@ -154,12 +154,9 @@ PY
           withSonarQubeEnv('SonarQube') {
             sh '''
               set -eux
-              # Ensure scanner can write temp files
-              export HOME="$WORKSPACE"
-
               sonar-scanner \
-                -Dsonar.projectBaseDir="$WORKSPACE" \
-                -Dsonar.login="$SONAR_AUTH_TOKEN"
+                -Dsonar.projectBaseDir="${HOME}" \
+                -Dsonar.login="${SONAR_AUTH_TOKEN}"
             '''
           }
         }
