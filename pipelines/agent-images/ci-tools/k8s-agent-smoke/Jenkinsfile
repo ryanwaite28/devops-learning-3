@@ -36,7 +36,6 @@ spec:
         requests: { cpu: "200m", memory: "512Mi" }
         limits:   { cpu: "1000m", memory: "1Gi" }
       env:
-        env:
         - name: HOME
           value: /home/jenkins/agent
         - name: SEMGREP_USER_HOME
