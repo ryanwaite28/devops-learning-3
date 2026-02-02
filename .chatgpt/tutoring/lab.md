@@ -1,5 +1,5 @@
 #### Me
-```
+```txt
 Hi. I am an aspiring devops engineer. I want to learn Kubernetes to use as platform engineering - i want to learn how to use it to manage a cloud infrastructure. More specifically, use it with Jenkins for  Jenkins Cloud: provisioning agents to run jobs at scale. Assume the role of a master DevSecOps engineer. Lay out a portfolio project for me to do that covers/implements all aspects of DevSecOps at the top of the industry standards/level. Structure the project and deliverable as a local lab that can be uploaded to a GitHub repo; the goal is to use docker compose and open-source images/tools as much as possible. The instructions for recreating will be part of a readme markdown file. The application itself is not the focus - it can be a simple app that connects to a postgres database and redis containers with basic/simple APIs; the focus is on the DevOps side, not application side. Give a road map on each aspect to implement as i work on this project and list recommended tools/options for each (example: for scm, use gitlab ce; for ci/cd, use jenkins; for secrets management, use infisical; for logging, use splunk; for monitoring, use prometheus; for visualization, use grafana, etc). The outcome should be a resume-ready portfolio project that matches the work and understanding of a top-of-the-line/professional devops engineer.
 ```
 
