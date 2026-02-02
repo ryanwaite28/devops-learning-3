@@ -73,6 +73,18 @@ spec:
       }
     }
 
+    stage('Prepare CI Workspace') {
+      steps {
+        sh '''
+          set -eux
+          # Ensure Semgrep (and other tools) have expected XDG dirs
+          mkdir -p "$HOME/.cache" "$HOME/.config" "$HOME/.semgrep" reports
+          # Make sure current user can write
+          chmod -R u+rwX,go+rX "$HOME/.cache" "$HOME/.config" "$HOME/.semgrep" || true
+        '''
+      }
+    }
+
     stage('Tool Versions') {
       steps {
         sh '''
