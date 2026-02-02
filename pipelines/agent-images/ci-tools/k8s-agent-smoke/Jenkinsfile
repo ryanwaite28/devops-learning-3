@@ -154,6 +154,9 @@ PY
           withSonarQubeEnv('SonarQube') {
             sh '''
               set -eux
+
+              export WORKSPACE="$CI_HOME"
+
               sonar-scanner \
                 -Dsonar.projectBaseDir="${HOME}" \
                 -Dsonar.login="${SONAR_AUTH_TOKEN}"
