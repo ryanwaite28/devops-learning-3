@@ -3,7 +3,7 @@ pipeline {
     kubernetes {
       label 'k8s-agent-smoke'
       defaultContainer 'tools'
-      yaml """
+      yaml '''
 apiVersion: v1
 kind: Pod
 spec:
@@ -38,7 +38,7 @@ spec:
       env:
         - name: TRIVY_CACHE_DIR
           value: $WORKSPACE/.cache/trivy
-"""
+'''
     }
   }
 
@@ -154,8 +154,8 @@ PY
           withSonarQubeEnv('SonarQube') {
             sh '''
               set -eux
-
-              export WORKSPACE="$HOME"
+              # Make sure Sonar writes temp/config in a writable place
+              export HOME="$WORKSPACE"
 
               sonar-scanner \
                 -Dsonar.projectBaseDir="${HOME}" \
