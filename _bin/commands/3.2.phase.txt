@@ -1,0 +1,29 @@
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl -n ci create token jenkins-ci
+[redacted]
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % docker exec -it jenkins curl -k https://host.docker.internal:52417/version
+Error response from daemon: No such container: jenkins
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % docker exec -it kube-lab-jenkins-1s curl -k https://host.docker.internal:52417/version
+Error response from daemon: No such container: kube-lab-jenkins-1s
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % docker exec -it kube-lab-jenkins-1 curl -k https://host.docker.internal:52417/version
+{
+  "major": "1",
+  "minor": "35",
+  "emulationMajor": "1",
+  "emulationMinor": "35",
+  "minCompatibilityMajor": "1",
+  "minCompatibilityMinor": "34",
+  "gitVersion": "v1.35.0",
+  "gitCommit": "66452049f3d692768c39c797b21b793dce80314e",
+  "gitTreeState": "clean",
+  "buildDate": "2025-12-17T12:32:07Z",
+  "goVersion": "go1.25.5",
+  "compiler": "gc",
+  "platform": "linux/arm64"
+}
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 

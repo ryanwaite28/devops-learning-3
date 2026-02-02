@@ -1,0 +1,136 @@
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % sh ./kubernetes/clusters/kind/scripts/create-cluster.sh
+Creating cluster "kube-lab" ...
+ ✓ Ensuring node image (kindest/node:v1.35.0) 🖼
+ ✓ Preparing nodes 📦 📦 📦  
+ ✓ Writing configuration 📜 
+ ✓ Starting control-plane 🕹️ 
+ ✓ Installing CNI 🔌 
+ ✓ Installing StorageClass 💾 
+ ✓ Joining worker nodes 🚜 
+Set kubectl context to "kind-kube-lab"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-kube-lab
+
+Have a question, bug, or feature request? Let us know! https://kind.sigs.k8s.io/#community 🙂
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl cluster-info
+Kubernetes control plane is running at https://127.0.0.1:52417
+CoreDNS is running at https://127.0.0.1:52417/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get nodes
+NAME                     STATUS   ROLES           AGE     VERSION
+kube-lab-control-plane   Ready    control-plane   5m36s   v1.35.0
+kube-lab-worker          Ready    <none>          5m23s   v1.35.0
+kube-lab-worker2         Ready    <none>          5m23s   v1.35.0
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % sh ./kubernetes/namespaces/scripts/create-namespaces.sh
+namespace/app created
+namespace/ci created
+namespace/obervability created
+namespace/security created
+NAME                 STATUS   AGE
+app                  Active   0s
+ci                   Active   0s
+default              Active   13m
+kube-node-lease      Active   13m
+kube-public          Active   13m
+kube-system          Active   13m
+local-path-storage   Active   13m
+obervability         Active   0s
+security             Active   0s
+NAMESPACE            NAME                                             READY   STATUS    RESTARTS   AGE
+kube-system          coredns-7d764666f9-hzsbf                         1/1     Running   0          13m
+kube-system          coredns-7d764666f9-s7w88                         1/1     Running   0          13m
+kube-system          etcd-kube-lab-control-plane                      1/1     Running   0          13m
+kube-system          kindnet-6zq7h                                    1/1     Running   0          13m
+kube-system          kindnet-cb98b                                    1/1     Running   0          13m
+kube-system          kindnet-rxcf5                                    1/1     Running   0          13m
+kube-system          kube-apiserver-kube-lab-control-plane            1/1     Running   0          13m
+kube-system          kube-controller-manager-kube-lab-control-plane   1/1     Running   0          13m
+kube-system          kube-proxy-2nf8n                                 1/1     Running   0          13m
+kube-system          kube-proxy-kq5wj                                 1/1     Running   0          13m
+kube-system          kube-proxy-pdhmv                                 1/1     Running   0          13m
+kube-system          kube-scheduler-kube-lab-control-plane            1/1     Running   0          13m
+local-path-storage   local-path-provisioner-67b8995b4b-8vmrd          1/1     Running   0          13m
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl delete ns obervability
+namespace "obervability" deleted
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl apply -f kubernetes/namespaces/configs/observability.namespace.yaml 
+namespace/observability created
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get ns
+NAME                 STATUS   AGE
+app                  Active   11m
+ci                   Active   11m
+default              Active   25m
+kube-node-lease      Active   25m
+kube-public          Active   25m
+kube-system          Active   25m
+local-path-storage   Active   25m
+observability        Active   10s
+security             Active   11m
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -A
+NAMESPACE            NAME                                             READY   STATUS    RESTARTS   AGE
+kube-system          coredns-7d764666f9-hzsbf                         1/1     Running   0          25m
+kube-system          coredns-7d764666f9-s7w88                         1/1     Running   0          25m
+kube-system          etcd-kube-lab-control-plane                      1/1     Running   0          25m
+kube-system          kindnet-6zq7h                                    1/1     Running   0          25m
+kube-system          kindnet-cb98b                                    1/1     Running   0          25m
+kube-system          kindnet-rxcf5                                    1/1     Running   0          25m
+kube-system          kube-apiserver-kube-lab-control-plane            1/1     Running   0          25m
+kube-system          kube-controller-manager-kube-lab-control-plane   1/1     Running   0          25m
+kube-system          kube-proxy-2nf8n                                 1/1     Running   0          25m
+kube-system          kube-proxy-kq5wj                                 1/1     Running   0          25m
+kube-system          kube-proxy-pdhmv                                 1/1     Running   0          25m
+kube-system          kube-scheduler-kube-lab-control-plane            1/1     Running   0          25m
+local-path-storage   local-path-provisioner-67b8995b4b-8vmrd          1/1     Running   0          25m
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl apply -f kubernetes/namespaces/configs/ingress.namespace.yaml      
+namespace/ingress created
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get ns                                                       
+NAME                 STATUS   AGE
+app                  Active   17m
+ci                   Active   17m
+default              Active   30m
+ingress              Active   3s
+kube-node-lease      Active   30m
+kube-public          Active   30m
+kube-system          Active   30m
+local-path-storage   Active   30m
+observability        Active   5m34s
+security             Active   17m
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -A                                                  
+NAMESPACE            NAME                                             READY   STATUS    RESTARTS   AGE
+kube-system          coredns-7d764666f9-hzsbf                         1/1     Running   0          30m
+kube-system          coredns-7d764666f9-s7w88                         1/1     Running   0          30m
+kube-system          etcd-kube-lab-control-plane                      1/1     Running   0          30m
+kube-system          kindnet-6zq7h                                    1/1     Running   0          30m
+kube-system          kindnet-cb98b                                    1/1     Running   0          30m
+kube-system          kindnet-rxcf5                                    1/1     Running   0          30m
+kube-system          kube-apiserver-kube-lab-control-plane            1/1     Running   0          30m
+kube-system          kube-controller-manager-kube-lab-control-plane   1/1     Running   0          30m
+kube-system          kube-proxy-2nf8n                                 1/1     Running   0          30m
+kube-system          kube-proxy-kq5wj                                 1/1     Running   0          30m
+kube-system          kube-proxy-pdhmv                                 1/1     Running   0          30m
+kube-system          kube-scheduler-kube-lab-control-plane            1/1     Running   0          30m
+local-path-storage   local-path-provisioner-67b8995b4b-8vmrd          1/1     Running   0          30m
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+

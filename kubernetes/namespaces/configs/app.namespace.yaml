@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app
+  labels:
+    platform.kubernetes.io/domain: app
+  annotations:
+    purpose: "App environment for core application workloads"

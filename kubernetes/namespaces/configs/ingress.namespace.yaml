@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress
+  labels:
+    platform.kubernetes.io/domain: ingress
+  annotations:
+    purpose: "Entrypoint for external traffic into the cluster"

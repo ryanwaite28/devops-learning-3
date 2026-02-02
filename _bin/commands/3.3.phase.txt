@@ -1,0 +1,698 @@
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-3s32m   0/1     Pending   0          0s
+jnlp-agent-3s32m   0/1     Pending   0          0s
+jnlp-agent-3s32m   0/1     ContainerCreating   0          1s
+jnlp-agent-3s32m   1/1     Running             0          15s
+jnlp-agent-3s32m   0/1     OOMKilled           0          21m
+jnlp-agent-3s32m   0/1     OOMKilled           0          21m
+jnlp-agent-3s32m   0/1     OOMKilled           0          21m
+jnlp-agent-3s32m   0/1     OOMKilled           0          21m
+jnlp-agent-3z3tz   0/1     Pending             0          0s
+jnlp-agent-3z3tz   0/1     Pending             0          8s
+jnlp-agent-3z3tz   0/1     ContainerCreating   0          8s
+jnlp-agent-3z3tz   1/1     Running             0          11s
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-3z3tz   1/1     Running   0          100s
+^C%                                                                                                                                                                                                         ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci   
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-3z3tz   1/1     Running   0          12m
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-3z3tz   1/1     Running   0          12m
+jnlp-agent-3z3tz   1/1     Terminating   0          19m
+jnlp-agent-3z3tz   1/1     Terminating   0          19m
+jnlp-agent-vf4qb   0/1     Pending       0          0s
+jnlp-agent-vf4qb   0/1     Pending       0          1s
+jnlp-agent-vf4qb   0/1     ContainerCreating   0          3s
+jnlp-agent-vf4qb   0/1     ErrImagePull        0          57s
+jnlp-agent-3z3tz   0/1     Error               0          20m
+jnlp-agent-vf4qb   0/1     ImagePullBackOff    0          68s
+jnlp-agent-3z3tz   0/1     Error               0          20m
+jnlp-agent-3z3tz   0/1     Error               0          20m
+jnlp-agent-vf4qb   1/1     Running             0          2m18s
+^C%                                                                                                                                          ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl describe pod jnlp-agent-vf4qb -n ci
+Name:             jnlp-agent-vf4qb
+Namespace:        ci
+Priority:         0
+Service Account:  default
+Node:             kube-lab-worker2/172.20.0.4
+Start Time:       Sat, 31 Jan 2026 23:51:28 -0500
+Labels:           jenkins=slave
+                  jenkins/label=k8s-agent
+                  jenkins/label-digest=473a482a407b4e94431fa6c91771a41ca17750f6
+                  kubernetes.jenkins.io/controller=http___host_docker_internal_7000x
+Annotations:      kubernetes.jenkins.io/last-refresh: 1769921486881
+Status:           Running
+IP:               10.244.2.2
+IPs:
+  IP:  10.244.2.2
+Containers:
+  jnlp:
+    Container ID:  containerd://5af16af5572c0946510997a69b8936c0a57bfc8397f84e25e154f0bda07436f3
+    Image:         jenkins/inbound-agent:latest
+    Image ID:      docker.io/jenkins/inbound-agent@sha256:1d37cd31771659a176ed262db8f263e3d5f9947d13712aae878c180e196ba4ea
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      sleep
+    Args:
+      9999999
+    State:          Running
+      Started:      Sat, 31 Jan 2026 23:53:38 -0500
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      JENKINS_SECRET:         c79116452a7e99899533bccc7735fb472ea9c3a0e540b2697f37072bf2cfa76d
+      JENKINS_AGENT_NAME:     jnlp-agent-vf4qb
+      REMOTING_OPTS:          -noReconnectAfter 1d
+      JENKINS_NAME:           jnlp-agent-vf4qb
+      JENKINS_AGENT_WORKDIR:  /home/jenkins/agent
+      JENKINS_URL:            http://host.docker.internal:7000/
+    Mounts:
+      /home/jenkins/agent from workspace-volume (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-4b9z8 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  workspace-volume:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  kube-api-access-4b9z8:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                    From               Message
+  ----     ------     ----                   ----               -------
+  Normal   Scheduled  4m14s                  default-scheduler  Successfully assigned ci/jnlp-agent-vf4qb to kube-lab-worker2
+  Warning  Failed     3m31s                  kubelet            spec.containers{jnlp}: Failed to pull image "jenkins/inbound-agent:latest": failed to pull and unpack image "docker.io/jenkins/inbound-agent:latest": failed to resolve reference "docker.io/jenkins/inbound-agent:latest": failed to do request: Head "https://registry-1.docker.io/v2/jenkins/inbound-agent/manifests/latest": net/http: TLS handshake timeout
+  Warning  Failed     3m31s                  kubelet            spec.containers{jnlp}: Error: ErrImagePull
+  Normal   BackOff    3m29s                  kubelet            spec.containers{jnlp}: Back-off pulling image "jenkins/inbound-agent:latest"
+  Warning  Failed     3m29s                  kubelet            spec.containers{jnlp}: Error: ImagePullBackOff
+  Normal   Pulling    3m18s (x2 over 3m54s)  kubelet            spec.containers{jnlp}: Pulling image "jenkins/inbound-agent:latest"
+  Normal   Pulled     2m6s                   kubelet            spec.containers{jnlp}: Successfully pulled image "jenkins/inbound-agent:latest" in 1m11.272s (1m11.274s including waiting). Image size: 144781943 bytes.
+  Normal   Created    2m6s                   kubelet            spec.containers{jnlp}: Container created
+  Normal   Started    2m3s                   kubelet            spec.containers{jnlp}: Container started
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w                  
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-vf4qb   1/1     Running   0          6m15s
+^C%                                                                                                                                          ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl delete pod -n ci --all
+pod "jnlp-agent-vf4qb" deleted from ci namespace
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w     
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-k08qg   0/1     Pending   0          0s
+jnlp-agent-k08qg   0/1     Pending   0          1s
+jnlp-agent-k08qg   0/1     ContainerCreating   0          1s
+jnlp-agent-k08qg   1/1     Running             0          8s
+STATUS             REASON          MESSAGE
+Failure            InternalError   an error on the server ("unable to decode an event from the watch stream: http2: client connection lost") has prevented the request from succeeding
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w
+^C
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci   
+Unable to connect to the server: net/http: TLS handshake timeout
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w
+NAME               READY   STATUS      RESTARTS   AGE
+jnlp-agent-ggggz   1/1     Running     0          93s
+jnlp-agent-k08qg   0/1     OOMKilled   0          6m9s
+STATUS             REASON          MESSAGE
+Failure            InternalError   an error on the server ("unable to decode an event from the watch stream: http2: client connection lost") has prevented the request from succeeding
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci   
+NAME               READY   STATUS      RESTARTS   AGE
+jnlp-agent-ggggz   0/1     OOMKilled   0          7m48s
+jnlp-agent-k08qg   0/1     OOMKilled   0          12m
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl logs jnlp-agent-ggggz -n ci
+Feb 01, 2026 5:06:41 AM org.jenkinsci.remoting.engine.WorkDirManager initializeWorkDir
+INFO: Using /home/jenkins/agent/remoting as a remoting work directory
+Feb 01, 2026 5:06:42 AM org.jenkinsci.remoting.engine.WorkDirManager setupLogging
+INFO: Both error and output logs will be printed to /home/jenkins/agent/remoting
+Feb 01, 2026 5:06:42 AM hudson.remoting.Launcher createEngine
+INFO: Setting up agent: jnlp-agent-ggggz
+Feb 01, 2026 5:06:42 AM hudson.remoting.Engine startEngine
+INFO: Using Remoting version: 3355.v388858a_47b_33
+Feb 01, 2026 5:06:42 AM org.jenkinsci.remoting.engine.WorkDirManager initializeWorkDir
+INFO: Using /home/jenkins/agent/remoting as a remoting work directory
+Feb 01, 2026 5:06:43 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:06:43 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:06:43 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:06:44 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:06:54 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:06:54 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:06:54 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:06:54 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:07:04 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:07:04 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:07:04 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:07:04 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:07:14 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:07:22 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:07:23 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:07:23 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:07:33 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:07:33 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:07:33 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:07:33 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:07:43 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:07:44 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:07:44 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:07:44 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:07:54 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:07:54 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:07:54 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:07:54 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:08:04 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:08:05 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:08:05 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:08:05 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:08:15 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:08:15 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:08:15 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:08:15 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:08:25 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:08:25 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:08:25 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:08:25 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:08:35 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:08:35 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:08:35 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:08:35 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:08:45 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:08:45 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:08:45 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:08:45 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:08:55 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:08:56 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:08:56 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:08:56 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:09:06 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:09:06 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:09:06 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:09:06 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:09:16 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:09:16 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:09:16 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:09:16 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:09:26 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:09:26 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:09:26 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:09:26 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:09:36 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:09:37 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:09:37 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:09:37 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:09:47 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:09:47 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:09:47 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:09:47 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:09:57 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:10:00 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:10:00 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:10:01 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:10:11 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:10:11 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:10:11 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:10:11 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:10:21 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:10:21 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:10:21 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:10:21 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:10:31 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:10:31 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:10:31 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:10:31 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:10:41 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:10:41 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:10:41 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:10:41 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:10:51 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:10:52 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:10:52 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:10:52 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:11:02 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:11:02 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:11:02 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:11:02 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:11:12 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:11:13 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:11:13 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:11:13 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:11:23 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+Feb 01, 2026 5:11:23 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Feb 01, 2026 5:11:23 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver isPortVisible
+WARNING: Connection refused
+Feb 01, 2026 5:11:23 AM hudson.remoting.Launcher$CuiListener status
+INFO: Could not locate server among [http://host.docker.internal:7000/]; waiting 10 seconds before retry
+java.io.IOException: http://host.docker.internal:7000/ provided port:50000 is not reachable on host host.docker.internal
+	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:331)
+	at hudson.remoting.Engine.innerRun(Engine.java:1001)
+	at hudson.remoting.Engine.runTcp(Engine.java:621)
+	at hudson.remoting.Engine.run(Engine.java:562)
+
+Feb 01, 2026 5:11:33 AM hudson.remoting.Launcher$CuiListener status
+INFO: Locating server among [http://host.docker.internal:7000/]
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl delete pod -n ci --all     
+pod "jnlp-agent-ggggz" deleted from ci namespace
+pod "jnlp-agent-k08qg" deleted from ci namespace
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl -n ci create token jenkins-ci                                     
+eyJhbGciOiJSUzI1NiIsImtpZCI6InlkV3NaellwUExiSmwwRVdhQ0dONXdzd05TY3ozTjZ2amgweG02MjMxY00ifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzY5OTI2ODk5LCJpYXQiOjE3Njk5MjMyOTksImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwianRpIjoiNGRhMzg5NzAtNmY2MS00NzViLThjNzYtZmZlNjllNDUyMWI1Iiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJjaSIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJqZW5raW5zLWNpIiwidWlkIjoiZjBmNjk3N2ItMzNkYS00MTA1LWE1ZDItOTNiZjRkNWZjNWMwIn19LCJuYmYiOjE3Njk5MjMyOTksInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpjaTpqZW5raW5zLWNpIn0.ev1sqG4nF-sa2vP60aWWgcdwuszAlPwY19Ui6lnn_orGkDI-sYtRXrQwJQO5btBbkJ7-VTDbC1OkiwiHHhNxXBNhbsClLlMFcPkAZbxyLV6PJxHVKrqT5oBpF9DXsdl66tqNKamgtzY1F0y-grsL1FLUKHUTsaIdV9qpKcBQBz4azawGXk4x7bZoJXYg68PXxPDHBRu_tWx591qiT29KV3PfysG5y_uTwrC8TLrIluRYadsob9rHvMuoNAanzQfZYPBkjScGb4YDh7EwBlj-qYlJfUo3EKWOk8xLMIdxaFf03YkF_a5tOfOLUsQmKHbtvtlRbRsS76P1tliZlYJ5Rw
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w            
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-881ld   0/1     Pending   0          0s
+jnlp-agent-881ld   0/1     Pending   0          0s
+jnlp-agent-881ld   0/1     ContainerCreating   0          1s
+jnlp-agent-881ld   1/1     Running             0          2s
+jnlp-agent-881ld   1/1     Terminating         0          24s
+jnlp-agent-881ld   1/1     Terminating         0          24s
+jnlp-agent-881ld   0/1     Error               0          25s
+jnlp-agent-881ld   0/1     Error               0          26s
+jnlp-agent-881ld   0/1     Error               0          26s
+^C%                                                                                                                                          ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci   
+No resources found in ci namespace.
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-p2tf8   0/1     Pending   0          0s
+jnlp-agent-p2tf8   0/1     Pending   0          1s
+jnlp-agent-p2tf8   0/1     ContainerCreating   0          1s
+jnlp-agent-p2tf8   1/1     Running             0          3s
+jnlp-agent-p2tf8   1/1     Terminating         0          21s
+jnlp-agent-p2tf8   1/1     Terminating         0          22s
+jnlp-agent-p2tf8   0/1     Error               0          22s
+jnlp-agent-p2tf8   0/1     Error               0          23s
+jnlp-agent-p2tf8   0/1     Error               0          23s
+^C%                                                                                                                                          ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-6grzw   1/1     Running   0          12s
+jnlp-agent-6grzw   1/1     Terminating   0          28s
+jnlp-agent-6grzw   1/1     Terminating   0          28s
+jnlp-agent-6grzw   0/1     Error         0          29s
+jnlp-agent-6grzw   0/1     Error         0          29s
+jnlp-agent-6grzw   0/1     Error         0          29s
+^C%                                                                                                                                          ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci   
+No resources found in ci namespace.
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-lh152   1/1     Running   0          15s
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-lh152   1/1     Running   0          23s
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w
+NAME               READY   STATUS    RESTARTS   AGE
+jnlp-agent-lh152   1/1     Running   0          27s
+jnlp-agent-lh152   0/1     Completed   0          71s
+jnlp-agent-lh152   0/1     Completed   0          72s
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kind get clusters
+kind
+kube-lab
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl -n ci create token jenkins-ci --duration=8760h
+eyJhbGciOiJSUzI1NiIsImtpZCI6InlkV3NaellwUExiSmwwRVdhQ0dONXdzd05TY3ozTjZ2amgweG02MjMxY00ifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxODAxNDk0MzY2LCJpYXQiOjE3Njk5NTgzNjYsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwianRpIjoiMmRiNjZlZWYtODRjZC00MWQ0LWEwYWMtYmYzMzdkMzk3NTNmIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJjaSIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJqZW5raW5zLWNpIiwidWlkIjoiZjBmNjk3N2ItMzNkYS00MTA1LWE1ZDItOTNiZjRkNWZjNWMwIn19LCJuYmYiOjE3Njk5NTgzNjYsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpjaTpqZW5raW5zLWNpIn0.WiHGcK7SeQ4CmRJgHW1y5SBPsuXNgbOHpaFMcvZXc4FMXhH34Szdv7FZ7E6qO6hikhtjPIY5DmjxSmmK6fH0zkfFXQt5Bp1IXvHJaRVa_1ZCmhZXZVRxyQ-f52HibdGHjcKm_NSAsTk8bdZxjH1P7B2SflVR8aBUke5NgExpNyKTknS2WQoqzgp0p0FvgjEH1hWj-vsdP4miqX6hYgeCMEpP6R9l9YE7_Z9hAVlRfl7rMDZxhUL24GK8zUcQe6nUW87YEuYPtfi1qTE6icbtWtU1ln-iyceBZfazi2hlCZx-TY0JEQ9-BjprAm0lsilhIdvV8IsOzVlQEtFiGCfR8w
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl get pods -n ci -w                             
+NAME               READY   STATUS      RESTARTS   AGE
+jnlp-agent-lh152   0/1     Completed   0          9h
+jnlp-agent-7d7vh   0/1     Pending     0          0s
+jnlp-agent-7d7vh   0/1     Pending     0          0s
+jnlp-agent-7d7vh   0/1     ContainerCreating   0          1s
+jnlp-agent-7d7vh   1/1     Running             0          4s
+jnlp-agent-7d7vh   0/1     OOMKilled           0          44s
+jnlp-agent-7d7vh   0/1     OOMKilled           0          47s
+jnlp-agent-7d7vh   0/1     OOMKilled           0          48s
+jnlp-agent-7d7vh   0/1     OOMKilled           0          48s
+jnlp-agent-vbf6f   0/1     Pending             0          0s
+jnlp-agent-vbf6f   0/1     Pending             0          1s
+jnlp-agent-vbf6f   0/1     ContainerCreating   0          3s
+jnlp-agent-vbf6f   1/1     Running             0          7s
+jnlp-agent-vbf6f   0/1     OOMKilled           0          24s
+jnlp-agent-vbf6f   0/1     Terminating         0          25s
+jnlp-agent-vbf6f   0/1     OOMKilled           0          25s
+jnlp-agent-vbf6f   0/1     OOMKilled           0          26s
+jnlp-agent-vbf6f   0/1     OOMKilled           0          26s
+jnlp-agent-vbf6f   0/1     OOMKilled           0          26s
+jnlp-agent-lm40b   0/1     Pending             0          0s
+jnlp-agent-lm40b   0/1     Pending             0          5s
+jnlp-agent-lm40b   0/1     ContainerCreating   0          5s
+jnlp-agent-lm40b   1/1     Running             0          8s
+STATUS             REASON          MESSAGE
+Failure            InternalError   an error on the server ("unable to decode an event from the watch stream: http2: client connection lost") has prevented the request from succeeding
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % kubectl delete pod -n ci --all                        
+Unable to connect to the server: net/http: TLS handshake timeout
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 

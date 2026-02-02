@@ -1,0 +1,141 @@
+version: '3.8'
+
+services:
+
+  ### --- --------------------------- --- ###
+  ### --- MANAGEMENT TOOLS & SERVICES --- ###
+  ### --- --------------------------- --- ###
+
+  # https://mailpit.axllent.org/docs/configuration/http/#send-api-endpoint-dedicated-authentication
+  mailpit:
+    image: axllent/mailpit:v1.28
+    restart: always
+    environment:
+      MP_DATA_FILE: /data/mailpit.db # Corrected variable name for file persistence
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - kube-platform-engineering-lab
+    volumes:
+      - mailpit-data:/data
+
+  gitlab:
+    image: gitlab/gitlab-ce:18.8.1-ce.0
+    restart: always
+    hostname: gitlab-ce
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab'
+        nginx['listen_port'] = 80
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        gitlab_rails['smtp_enable'] = true
+        gitlab_rails['smtp_address'] = "mailpit"
+        gitlab_rails['smtp_port'] = 1025
+        gitlab_rails['smtp_domain'] = "gitlab-ce"
+        gitlab_rails['smtp_authentication'] = "plain"
+        gitlab_rails['smtp_enable_starttls_auto'] = false
+        gitlab_rails['smtp_tls'] = false
+
+        registry_external_url 'http://gitlab:5050'
+        gitlab_rails['registry_enabled'] = true
+    ports:
+      - "8000:80"
+      - "2222:22"
+      - "8443:443"
+      - "5050:5050"
+    networks:
+      - kube-platform-engineering-lab
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+    shm_size: '256m'
+    depends_on:
+      - mailpit
+
+  jenkins:
+    # to get the initial admin password for Jenkins, run:
+    # docker compose exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+    image: jenkins/jenkins:lts-jdk17
+    ports:
+      - "7000:8080"   # Jenkins UI
+    volumes:
+      - jenkins-data:/var/jenkins_home
+    restart: unless-stopped
+    networks:
+      - kube-platform-engineering-lab
+
+  infisical-db:
+    image: postgres:16.11-alpine
+    env_file:
+      - infisical-db.env
+    networks:
+      - kube-platform-engineering-lab
+    volumes:
+      - infisical_db_data:/var/lib/postgresql/data
+
+  infisical-redis:
+    image: redis:7-alpine
+    networks:
+      - kube-platform-engineering-lab
+
+  infisical:
+    image: infisical/infisical:v0.158.0
+    restart: unless-stopped
+    depends_on:
+      - infisical-db
+      - infisical-redis
+    env_file:
+      - infisical-app.env
+    ports:
+      - "7001:8080"
+    networks:
+      - kube-platform-engineering-lab
+
+  sonarqube-db:
+    image: postgres:16.11-alpine
+    env_file:
+      - sonarqube-db.env
+    networks:
+      - kube-platform-engineering-lab
+    volumes:
+      - sonarqube_db_data:/var/lib/postgresql/data
+
+  sonarqube:
+    image: sonarqube:lts-community
+    depends_on:
+      - sonarqube-db
+    env_file:
+      - sonarqube-db.env
+    ports:
+      - "9000:9000"
+    networks:
+      - kube-platform-engineering-lab
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
+
+
+networks:
+  kube-platform-engineering-lab:
+    name: kube-platform-engineering-lab
+    driver: bridge
+
+volumes:
+  mailpit-data:
+  infisical_db_data:
+
+  gitlab-config:
+  gitlab-logs:
+  gitlab-data:
+  
+  jenkins-data:
+
+  sonarqube_db_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  

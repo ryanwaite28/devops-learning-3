@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins-ci
+  namespace: ci
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jenkins-ci-role
+  namespace: ci
+rules:
+  - apiGroups: [""]
+    resources:
+      - pods
+      - pods/log
+      - pods/exec
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - watch
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-ci-binding
+  namespace: ci
+subjects:
+  - kind: ServiceAccount
+    name: jenkins-ci
+    namespace: ci
+roleRef:
+  kind: Role
+  name: jenkins-ci-role
+  apiGroup: rbac.authorization.k8s.io

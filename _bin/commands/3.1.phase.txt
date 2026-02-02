@@ -1,0 +1,12 @@
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % sh ./kubernetes/ci/rbac/scripts/create-jenkins-ci-role.sh
+### --- Start --- ###
++ kubectl apply -f kubernetes/ci/rbac/configs/jenkinss-ci.rbac.yaml
+serviceaccount/jenkins-ci created
+role.rbac.authorization.k8s.io/jenkins-ci-role created
+rolebinding.rbac.authorization.k8s.io/jenkins-ci-binding created
++ kubectl auth can-i create pods --as=system:serviceaccount:ci:jenkins-ci -n ci
+yes
++ kubectl auth can-i create pods --as=system:serviceaccount:ci:jenkins-ci -n default
+no
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab % 

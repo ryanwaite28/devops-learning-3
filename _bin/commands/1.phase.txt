@@ -1,0 +1,1 @@
+ryanwaite28@Ryans-MacBook-Air kube-platform-engineering-lab %  docker compose --project-name kube-lab up -d

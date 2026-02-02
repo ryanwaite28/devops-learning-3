@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+  labels:
+    platform.kubernetes.io/domain: observability
+  annotations:
+    purpose: "Metrics, logging, tracing, and alerting platform components"
