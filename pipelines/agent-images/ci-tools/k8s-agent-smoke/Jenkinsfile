@@ -28,6 +28,11 @@ spec:
     resources:
       requests: { cpu: "200m", memory: "512Mi" }
       limits:   { cpu: "1000m", memory: "1Gi" }
+    env:
+      - name: HOME
+        value: /home/jenkins/agent
+      - name: SEMGREP_USER_HOME
+        value: /home/jenkins/agent/.semgrep
 """
     }
   }
@@ -76,6 +81,7 @@ spec:
       steps {
         sh '''
           set -eux
+          mkdir -p "${HOME}/.semgrep"
           mkdir -p "${REPORTS_DIR}"
           # Non-blocking for now; we'll add gating rules next
           semgrep --metrics off --config p/ci --json -o "${REPORTS_DIR}/semgrep.json" . || true
